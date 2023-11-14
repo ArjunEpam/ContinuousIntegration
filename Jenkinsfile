@@ -1,36 +1,44 @@
 pipeline {
-    agent any
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        echo 'Building the project...'
+      }
+    }
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building the project...'
-                // Add build commands here
-            }
-        }
-
+    stage('Test') {
+      parallel {
         stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Add test commands here
-            }
+          steps {
+            echo 'Running tests...'
+          }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                // Add deployment commands here
-            }
+        stage('API Tests') {
+          steps {
+            echo 'Commands for API Tests'
+          }
         }
+
+      }
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully! Ready for production.'
-        }
-
-        failure {
-            echo 'Pipeline failed. Review and address the issues.'
-        }
+    stage('Deploy') {
+      steps {
+        echo 'Deploying the application...'
+      }
     }
+
+  }
+  post {
+    success {
+      echo 'Pipeline completed successfully! Ready for production.'
+    }
+
+    failure {
+      echo 'Pipeline failed. Review and address the issues.'
+    }
+
+  }
 }
